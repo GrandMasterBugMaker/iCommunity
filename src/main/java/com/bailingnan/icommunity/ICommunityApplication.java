@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ICommunityApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(ICommunityApplication.class, args);
     }
 
