@@ -8,21 +8,19 @@ import java.util.Date;
 
 /**
  * @author bailingnan
- * @date 2021/3/13
+ * @date 2021/3/14
  */
 @Getter
 @Setter
 @ToString
-public class User {
+public class DiscussPost {
     private int id;
-    private String userName;
-    private String password;
-    private String salt;
-    private String email;
+    private int userId;
+    private String title;
+    private String content;
     private int type;
     private int status;
-    private String activationCode;
-    private String headerUrl;
     private Date createTime;
-
+    private int commentCount;
+    private double score;
 }

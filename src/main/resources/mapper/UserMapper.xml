@@ -26,7 +26,7 @@
     </select>
     <insert id="insertUser" parameterType="com.bailingnan.icommunity.entity.User" keyProperty="id">
         insert into user (<include refid="insertFields"></include>)
-        values(#{username},#{password},#{salt},#{email},#{type},#{status},#{activationCode},#{headerUrl},#{createTime})
+        values(#{userName},#{password},#{salt},#{email},#{type},#{status},#{activationCode},#{headerUrl},#{createTime})
     </insert>
     <update id="updateStatus">
         update user set status=#{status}
