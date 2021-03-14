@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Mapper
 public interface DiscussPostMapper {
-    List<DiscussPost> selectDiscussionPosts(int userId,int offset,int limit);
+    List<DiscussPost> selectDiscussPosts(int userId,int offset,int limit);
 
     int selectDiscussPostRowsInt(@Param("userId")int userId);
 }

@@ -1,6 +1,5 @@
 package com.bailingnan.icommunity;
 
-import com.bailingnan.icommunity.dao.AlphaDao;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,13 +17,4 @@ class ICommunityApplicationTests implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
-    @Test
-    public void testApplicationContext(){
-        System.out.println(applicationContext);
-        AlphaDao alphaDao=applicationContext.getBean(AlphaDao.class);
-        System.out.println(alphaDao.select());
-
-        alphaDao=applicationContext.getBean("alphaHibernate",AlphaDao.class);
-        System.out.println(alphaDao.select());
-    }
 }

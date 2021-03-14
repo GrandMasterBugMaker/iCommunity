@@ -1,6 +1,8 @@
 package com.bailingnan.icommunity;
 
+import com.bailingnan.icommunity.dao.DiscussPostMapper;
 import com.bailingnan.icommunity.dao.UserMapper;
+import com.bailingnan.icommunity.entity.DiscussPost;
 import com.bailingnan.icommunity.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.activation.DataSource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author bailingnan
@@ -22,6 +25,8 @@ import java.util.Date;
 public class MapperTests {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private DiscussPostMapper discussPostMapper;
     @Test
     public void testSelectUsers(){
         User user = userMapper.selectById(101);
@@ -53,6 +58,15 @@ public class MapperTests {
         System.out.println(rows);
 
         rows=userMapper.updatePassword(150,"hello");
+        System.out.println(rows);
+    }
+    @Test
+    public void testSelectPosts(){
+        List<DiscussPost> list=discussPostMapper.selectDiscussPosts(0,0,10);
+        for(DiscussPost post:list){
+            System.out.println(post);
+        }
+        int rows=discussPostMapper.selectDiscussPostRowsInt(0);
         System.out.println(rows);
     }
 }
