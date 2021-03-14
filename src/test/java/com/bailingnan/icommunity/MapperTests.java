@@ -66,7 +66,7 @@ public class MapperTests {
         for(DiscussPost post:list){
             System.out.println(post);
         }
-        int rows=discussPostMapper.selectDiscussPostRowsInt(0);
+        int rows=discussPostMapper.selectDiscussPostRows(0);
         System.out.println(rows);
     }
 }

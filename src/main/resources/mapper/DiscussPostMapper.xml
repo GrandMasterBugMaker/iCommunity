@@ -15,7 +15,7 @@
         limit #{offset},#{limit}
     </select>
 
-    <select id="selectDiscussPostRowsInt" resultType="java.lang.Integer">
+    <select id="selectDiscussPostRows" resultType="java.lang.Integer">
         select count(id)
         from discuss_post
         where status!=2
