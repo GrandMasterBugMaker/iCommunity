@@ -39,7 +39,7 @@ public class MapperTests {
     @Test
     public void testInserUsers(){
         User user = new User();
-        user.setUserName("test");
+        user.setUsername("test");
         user.setPassword("123456");
         user.setSalt("abc");
         user.setEmail("test@qq.com");
