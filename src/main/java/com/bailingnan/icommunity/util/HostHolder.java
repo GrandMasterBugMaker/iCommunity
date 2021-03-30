@@ -14,7 +14,7 @@ public class HostHolder {
     public void setUser(User user){
         users.set(user);
     }
-    public User getUserById(){
+    public User getUser(){
         return users.get();
     }
     public void clear(){

@@ -25,7 +25,7 @@ public interface LoginTicketMapper {
     LoginTicket selectByTicket(String ticket);
 
     @Update({
-            "udpate login_ticket ",
+            "update login_ticket ",
             "set status=#{status} ",
             "where ticket=#{ticket} "
     })

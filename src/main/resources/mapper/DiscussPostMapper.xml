@@ -4,6 +4,9 @@
     <sql id="selectFields">
         id,user_id,title,content,status,create_time,comment_count,score
     </sql>
+    <sql id="insertFields">
+        user_id, title, content, type, status, create_time, comment_count, score
+    </sql>
     <select id="selectDiscussPosts" resultType="com.bailingnan.icommunity.entity.DiscussPost">
         select <include refid="selectFields"></include>
         from discuss_post
@@ -23,4 +26,8 @@
             and user_id=#{user_id}
         </if>
     </select>
+    <insert id="insertDiscussPost" parameterType="com.bailingnan.icommunity.entity.DiscussPost">
+        insert into discuss_post(<include refid="insertFields"></include>)
+        values(#{userId},#{title},#{content},#{type},#{status},#{createTime},#{commentCount},#{score})
+    </insert>
 </mapper>
