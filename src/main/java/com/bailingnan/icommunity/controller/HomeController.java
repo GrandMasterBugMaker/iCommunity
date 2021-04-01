@@ -37,14 +37,24 @@ public class HomeController {
       List<Map<String,Object>> discussPosts=new ArrayList<>();
       if(list!=null){
           for(DiscussPost post:list){
-              Map<String,Object> map=new HashMap<>();
-              map.put("post",post);
-              User user=userService.findUserById(post.getUserId());
-              map.put("user",user);
+              Map<String, Object> map = new HashMap<>();
+              map.put("post", post);
+              User user = userService.findUserById(post.getUserId());
+              map.put("user", user);
               discussPosts.add(map);
           }
       }
-      model.addAttribute("discussPosts",discussPosts);
+      model.addAttribute("discussPosts", discussPosts);
       return "/index";
   }
+
+    @RequestMapping(path = "/error", method = RequestMethod.GET)
+    public String getErrorPage() {
+        return "/error/500";
+    }
+
+    @RequestMapping(path = "/denied", method = RequestMethod.GET)
+    public String getDeniedPage() {
+        return "/error/404";
+    }
 }

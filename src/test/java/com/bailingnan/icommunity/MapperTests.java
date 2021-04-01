@@ -2,9 +2,11 @@ package com.bailingnan.icommunity;
 
 import com.bailingnan.icommunity.dao.DiscussPostMapper;
 import com.bailingnan.icommunity.dao.LoginTicketMapper;
+import com.bailingnan.icommunity.dao.MessageMapper;
 import com.bailingnan.icommunity.dao.UserMapper;
 import com.bailingnan.icommunity.entity.DiscussPost;
 import com.bailingnan.icommunity.entity.LoginTicket;
+import com.bailingnan.icommunity.entity.Message;
 import com.bailingnan.icommunity.entity.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.activation.DataSource;
 import java.util.Date;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ContextConfiguration(classes=ICommunityApplication.class)
+@ContextConfiguration(classes = ICommunityApplication.class)
 public class MapperTests {
     @Autowired
     private UserMapper userMapper;
@@ -31,15 +32,19 @@ public class MapperTests {
     private DiscussPostMapper discussPostMapper;
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+    @Autowired
+    private MessageMapper messageMapper;
+
     @Test
-    public void testSelectUsers(){
+    public void testSelectUsers() {
         User user = userMapper.selectById(101);
         System.out.println(user);
-        user=userMapper.selectByName("liubei");
+        user = userMapper.selectByName("liubei");
         System.out.println(user);
-        user=userMapper.selectByEmail("nowcoder101@sina.com");
+        user = userMapper.selectByEmail("nowcoder101@sina.com");
         System.out.println(user);
     }
+
     @Test
     public void testInserUsers(){
         User user = new User();
@@ -73,14 +78,38 @@ public class MapperTests {
         int rows=discussPostMapper.selectDiscussPostRows(0);
         System.out.println(rows);
     }
+
     @Test
-    public void testInsertLoginTicket(){
+    public void testInsertLoginTicket() {
         LoginTicket loginTicket = new LoginTicket();
         loginTicket.setUserId(101);
         loginTicket.setTicket("abc");
         loginTicket.setStatus(0);
-        loginTicket.setExpired(new Date(System.currentTimeMillis()+1000*60*10));
+        loginTicket.setExpired(new Date(System.currentTimeMillis() + 1000 * 60 * 10));
 
         loginTicketMapper.insertLoginTicket(loginTicket);
+    }
+
+    @Test
+    public void testSelectLetters() {
+        List<Message> list = messageMapper.selectConversations(111, 0, 20);
+        for (Message message : list) {
+            System.out.println(message);
+        }
+
+        int count = messageMapper.selectConversationCount(111);
+        System.out.println(count);
+
+        list = messageMapper.selectLetters("111_112", 0, 10);
+        for (Message message : list) {
+            System.out.println(message);
+        }
+
+        count = messageMapper.selectLetterCount("111_112");
+        System.out.println(count);
+
+        count = messageMapper.selectLetterUnreadCount(131, "111_131");
+        System.out.println(count);
+
     }
 }
