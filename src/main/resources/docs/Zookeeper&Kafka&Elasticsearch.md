@@ -42,7 +42,7 @@ cd /home/bailingnan/kafka_2.13-2.7.0/
 ## 启动
 
 ```shell
-zkServer.sh start
+zkServer.sh -daemon start
 ```
 
 ## 状态
@@ -68,7 +68,7 @@ vim /home/bailingnan/kafka_2.13-2.7.0/config/server.properties
 ## 启动kafka
 
 ```shell
-bin/kafka-server-start.sh config/server.properties
+bin/kafka-server-start.sh -daemon config/server.properties
 ```
 
 ## 创建topic
@@ -114,7 +114,7 @@ bin/kafka-server-stop.sh
 ## 运行
 
 ```shell
-./bin/elasticsearch
+./bin/elasticsearch -d
 ```
 
 ## 加权限
