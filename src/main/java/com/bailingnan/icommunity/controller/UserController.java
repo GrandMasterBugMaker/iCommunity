@@ -2,7 +2,10 @@ package com.bailingnan.icommunity.controller;
 
 import com.bailingnan.icommunity.annotation.LoginRequired;
 import com.bailingnan.icommunity.entity.User;
+import com.bailingnan.icommunity.service.FollowService;
+import com.bailingnan.icommunity.service.LikeService;
 import com.bailingnan.icommunity.service.UserService;
+import com.bailingnan.icommunity.util.CommunityConstant;
 import com.bailingnan.icommunity.util.CommunityUtil;
 import com.bailingnan.icommunity.util.HostHolder;
 import org.apache.commons.lang3.StringUtils;
@@ -28,9 +31,9 @@ import java.io.OutputStream;
  * @date 2021/3/30
  */
 @Controller
-@RequestMapping(path="/user")
-public class UserController {
-    private static final Logger logger= LoggerFactory.getLogger(UserController.class);
+@RequestMapping(path = "/user")
+public class UserController implements CommunityConstant {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Value("${icommunity.path.upload}")
     private String uploadPath;
     @Value("${icommunity.path.domain}")
@@ -41,11 +44,17 @@ public class UserController {
     private UserService userService;
     @Autowired
     private HostHolder hostHolder;
+    @Autowired
+    private LikeService likeService;
+    @Autowired
+    private FollowService followService;
+
     @LoginRequired
-    @RequestMapping(path="/setting",method = RequestMethod.GET)
+    @RequestMapping(path = "/setting", method = RequestMethod.GET)
     public String getSetting() {
         return "/site/setting";
     }
+
     @LoginRequired
     @RequestMapping(path = "/upload", method = RequestMethod.POST)
     public String uploadHeader(MultipartFile headerImage, Model model) {
@@ -92,7 +101,7 @@ public class UserController {
         response.setContentType("image/" + suffix);
         try (
                 FileInputStream fis = new FileInputStream(fileName);
-                OutputStream os = response.getOutputStream();
+                OutputStream os = response.getOutputStream()
         ) {
             byte[] buffer = new byte[1024];
             int b = 0;
@@ -104,6 +113,35 @@ public class UserController {
         }
     }
 
+    // 个人主页
+    @RequestMapping(path = "/profile/{userId}", method = RequestMethod.GET)
+    public String getProfilePage(@PathVariable("userId") int userId, Model model) {
+        User user = userService.findUserById(userId);
+        if (user == null) {
+            throw new RuntimeException("该用户不存在!");
+        }
+
+        // 用户
+        model.addAttribute("user", user);
+        // 点赞数量
+        int likeCount = likeService.findUserLikeCount(userId);
+        model.addAttribute("likeCount", likeCount);
+
+        // 关注数量
+        long followeeCount = followService.findFolloweeCount(userId, ENTITY_TYPE_USER);
+        model.addAttribute("followeeCount", followeeCount);
+        // 粉丝数量
+        long followerCount = followService.findFollowerCount(ENTITY_TYPE_USER, userId);
+        model.addAttribute("followerCount", followerCount);
+        // 是否已关注
+        boolean hasFollowed = false;
+        if (hostHolder.getUser() != null) {
+            hasFollowed = followService.hasFollowed(hostHolder.getUser().getId(), ENTITY_TYPE_USER, userId);
+        }
+        model.addAttribute("hasFollowed", hasFollowed);
+
+        return "/site/profile";
+    }
 
 
 }

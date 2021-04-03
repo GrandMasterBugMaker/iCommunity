@@ -4,7 +4,9 @@ import com.bailingnan.icommunity.entity.DiscussPost;
 import com.bailingnan.icommunity.entity.Page;
 import com.bailingnan.icommunity.entity.User;
 import com.bailingnan.icommunity.service.DiscussPostService;
+import com.bailingnan.icommunity.service.LikeService;
 import com.bailingnan.icommunity.service.UserService;
+import com.bailingnan.icommunity.util.CommunityConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,26 +23,31 @@ import java.util.Map;
  * @date 2021/3/15
  */
 @Controller
-public class HomeController {
+public class HomeController implements CommunityConstant {
     @Autowired
     private DiscussPostService discussPostService;
     @Autowired
     private UserService userService;
 
-  @RequestMapping(path = "/index", method = RequestMethod.GET)
-  public String getIndexPage(Model model, Page page) {
-      //方法调用栈，SpringMVC会自动实例化Model和Page,并将Page注入Model
-      //所以,在thymeleaf中可以直接访问Page对象中的数据
-      page.setRows(discussPostService.findDiscussPostRows(0));
-      page.setPath("/index");
-      List<DiscussPost> list=discussPostService.findDiscussPosts(0,page.getOffset(),page.getLimit());
-      List<Map<String,Object>> discussPosts=new ArrayList<>();
-      if(list!=null){
-          for(DiscussPost post:list){
+    @Autowired
+    private LikeService likeService;
+
+    @RequestMapping(path = "/index", method = RequestMethod.GET)
+    public String getIndexPage(Model model, Page page) {
+        //方法调用栈，SpringMVC会自动实例化Model和Page,并将Page注入Model
+        //所以,在thymeleaf中可以直接访问Page对象中的数据
+        page.setRows(discussPostService.findDiscussPostRows(0));
+        page.setPath("/index");
+        List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
+        List<Map<String, Object>> discussPosts = new ArrayList<>();
+        if (list != null) {
+          for(DiscussPost post:list) {
               Map<String, Object> map = new HashMap<>();
               map.put("post", post);
               User user = userService.findUserById(post.getUserId());
               map.put("user", user);
+              long likeCount = likeService.findEntityLikeCount(ENTITY_TYPE_POST, post.getId());
+              map.put("likeCount", likeCount);
               discussPosts.add(map);
           }
       }
