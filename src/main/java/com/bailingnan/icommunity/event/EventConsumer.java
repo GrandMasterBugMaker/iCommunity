@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -38,8 +37,8 @@ public class EventConsumer implements CommunityConstant {
 //    private ElasticsearchService elasticsearchService;
 
 
-    @Autowired
-    private ThreadPoolTaskScheduler taskScheduler;
+//    @Autowired
+//    private ThreadPoolTaskScheduler taskScheduler;
 
     @KafkaListener(topics = {TOPIC_COMMENT, TOPIC_LIKE, TOPIC_FOLLOW})
     public void handleCommentMessage(ConsumerRecord record) {

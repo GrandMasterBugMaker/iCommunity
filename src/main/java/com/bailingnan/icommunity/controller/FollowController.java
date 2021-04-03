@@ -1,7 +1,9 @@
 package com.bailingnan.icommunity.controller;
 
+import com.bailingnan.icommunity.entity.Event;
 import com.bailingnan.icommunity.entity.Page;
 import com.bailingnan.icommunity.entity.User;
+import com.bailingnan.icommunity.event.EventProducer;
 import com.bailingnan.icommunity.service.FollowService;
 import com.bailingnan.icommunity.service.UserService;
 import com.bailingnan.icommunity.util.CommunityConstant;
@@ -34,8 +36,8 @@ public class FollowController implements CommunityConstant {
     @Autowired
     private UserService userService;
 
-//    @Autowired
-//    private EventProducer eventProducer;
+    @Autowired
+    private EventProducer eventProducer;
 
     @RequestMapping(path = "/follow", method = RequestMethod.POST)
     @ResponseBody
@@ -44,14 +46,14 @@ public class FollowController implements CommunityConstant {
 
         followService.follow(user.getId(), entityType, entityId);
 
-//        // 触发关注事件
-//        Event event = new Event()
-//                .setTopic(TOPIC_FOLLOW)
-//                .setUserId(hostHolder.getUser().getId())
-//                .setEntityType(entityType)
-//                .setEntityId(entityId)
-//                .setEntityUserId(entityId);
-//        eventProducer.fireEvent(event);
+        // 触发关注事件
+        Event event = new Event()
+                .setTopic(TOPIC_FOLLOW)
+                .setUserId(hostHolder.getUser().getId())
+                .setEntityType(entityType)
+                .setEntityId(entityId)
+                .setEntityUserId(entityId);
+        eventProducer.fireEvent(event);
 
         return CommunityUtil.getJSONString(0, "已关注!");
     }
