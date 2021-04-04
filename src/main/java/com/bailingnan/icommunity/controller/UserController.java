@@ -38,7 +38,7 @@ public class UserController implements CommunityConstant {
     private String uploadPath;
     @Value("${icommunity.path.domain}")
     private String domain;
-    @Value("${server.servlet.context-path}")
+    @Value("/icommunity")
     private String contextPath;
     @Autowired
     private UserService userService;
@@ -83,7 +83,7 @@ public class UserController implements CommunityConstant {
         }
 
         // 更新当前用户的头像的路径(web访问路径)
-        // http://localhost:8080/community/user/header/xxx.png
+        // http://localhost:8080/icommunity/user/header/xxx.png
         User user = hostHolder.getUser();
         String headerUrl = domain + contextPath + "/user/header/" + fileName;
         userService.updateHeader(user.getId(), headerUrl);

@@ -5,6 +5,7 @@ import com.bailingnan.icommunity.entity.DiscussPost;
 import com.bailingnan.icommunity.entity.Event;
 import com.bailingnan.icommunity.entity.Message;
 import com.bailingnan.icommunity.service.DiscussPostService;
+import com.bailingnan.icommunity.service.ElasticsearchService;
 import com.bailingnan.icommunity.service.MessageService;
 import com.bailingnan.icommunity.util.CommunityConstant;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -33,8 +34,8 @@ public class EventConsumer implements CommunityConstant {
     @Autowired
     private DiscussPostService discussPostService;
 
-//    @Autowired
-//    private ElasticsearchService elasticsearchService;
+    @Autowired
+    private ElasticsearchService elasticsearchService;
 
 
 //    @Autowired
@@ -90,7 +91,7 @@ public class EventConsumer implements CommunityConstant {
         }
 
         DiscussPost post = discussPostService.findDiscussPostById(event.getEntityId());
-//        elasticsearchService.saveDiscussPost(post);
+        elasticsearchService.saveDiscussPost(post);
     }
 
     // 消费删帖事件
@@ -107,7 +108,7 @@ public class EventConsumer implements CommunityConstant {
             return;
         }
 
-//        elasticsearchService.deleteDiscussPost(event.getEntityId());
+        elasticsearchService.deleteDiscussPost(event.getEntityId());
     }
 
 //    // 消费分享事件

@@ -55,8 +55,9 @@
 						</li>
 					</ul>
 					<!-- 搜索 -->
-					<form action="site/search.html" class="form-inline my-2 my-lg-0">
-						<input aria-label="Search" class="form-control mr-sm-2" type="search"/>
+					<form class="form-inline my-2 my-lg-0" method="get" th:action="@{/search}">
+						<input aria-label="Search" class="form-control mr-sm-2" name="keyword" th:value="${keyword}"
+							   type="search"/>
 						<button class="btn btn-outline-light my-2 my-sm-0" type="submit">搜索</button>
 					</form>
 				</div>
@@ -129,9 +130,9 @@
 			<!-- 帖子列表 -->
 			<ul class="list-unstyled">
 				<li class="media pb-3 pt-3 mb-3 border-bottom" th:each="map:${discussPosts}">
-					<a th:href="@{|/user/profile/${map.user.id}|}">
+					<a th:href="@{|/user/profile/${map.user?.id}|}">
 						<img alt="用户头像" class="mr-4 rounded-circle" style="width:50px;height:50px;"
-							 th:src="${map.user.headerUrl}">
+							 th:src="${map.user?.headerUrl}">
 					</a>
 					<div class="media-body">
 						<h6 class="mt-0 mb-3">
@@ -140,7 +141,7 @@
 							<span class="badge badge-secondary bg-danger" th:if="${map.post.status==1}">精华</span>
 						</h6>
 						<div class="text-muted font-size-12">
-							<u class="mr-3" th:utext="${map.user.username}">寒江雪</u> 发布于 <b
+							<u class="mr-3" th:utext="${map.user?.username}">寒江雪</u> 发布于 <b
 								th:text="${#dates.format(map.post.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-15
 							15:32:18</b>
 							<ul class="d-inline float-right">
@@ -181,8 +182,7 @@
 			<div class="row">
 				<!-- 二维码 -->
 				<div class="col-4 qrcode">
-					<img class="img-thumbnail"
-						 src="https://myicommunity.oss-cn-beijing.aliyuncs.com/QRCode.png?versionId=CAEQDxiBgIDBkb_gxBciIGY3OWQyZWY0NzQzMzRjNGU4OGU0ZmE5MTc1ODUwZTlm"
+					<img class="img-thumbnail" src="https://uploadfiles.nowcoder.com/app/app_download.png"
 						 style="width:136px;"/>
 				</div>
 				<!-- 公司信息 -->

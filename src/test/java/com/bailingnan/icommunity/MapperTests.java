@@ -26,27 +26,33 @@ import java.util.List;
 @SpringBootTest
 @ContextConfiguration(classes = ICommunityApplication.class)
 public class MapperTests {
+
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
     private DiscussPostMapper discussPostMapper;
+
     @Autowired
     private LoginTicketMapper loginTicketMapper;
+
     @Autowired
     private MessageMapper messageMapper;
 
     @Test
-    public void testSelectUsers() {
+    public void testSelectUser() {
         User user = userMapper.selectById(101);
         System.out.println(user);
+
         user = userMapper.selectByName("liubei");
         System.out.println(user);
+
         user = userMapper.selectByEmail("nowcoder101@sina.com");
         System.out.println(user);
     }
 
     @Test
-    public void testInserUsers(){
+    public void testInsertUser() {
         User user = new User();
         user.setUsername("test");
         user.setPassword("123456");
@@ -55,27 +61,31 @@ public class MapperTests {
         user.setHeaderUrl("http://www.nowcoder.com/101.png");
         user.setCreateTime(new Date());
 
-        int rows =userMapper.insertUser(user);
+        int rows = userMapper.insertUser(user);
         System.out.println(rows);
         System.out.println(user.getId());
     }
+
     @Test
-    public void updateUsers(){
-        int rows = userMapper.updateStatus(150,1);
-        System.out.println(rows);
-        rows=userMapper.updateHeader(150,"http://www.nowcoder.com/102.png");
+    public void updateUser() {
+        int rows = userMapper.updateStatus(150, 1);
         System.out.println(rows);
 
-        rows=userMapper.updatePassword(150,"hello");
+        rows = userMapper.updateHeader(150, "http://www.nowcoder.com/102.png");
+        System.out.println(rows);
+
+        rows = userMapper.updatePassword(150, "hello");
         System.out.println(rows);
     }
+
     @Test
-    public void testSelectPosts(){
-        List<DiscussPost> list=discussPostMapper.selectDiscussPosts(0,0,10);
-        for(DiscussPost post:list){
+    public void testSelectPosts() {
+        List<DiscussPost> list = discussPostMapper.selectDiscussPosts(149, 0, 10);
+        for (DiscussPost post : list) {
             System.out.println(post);
         }
-        int rows=discussPostMapper.selectDiscussPostRows(0);
+
+        int rows = discussPostMapper.selectDiscussPostRows(149);
         System.out.println(rows);
     }
 
@@ -88,6 +98,16 @@ public class MapperTests {
         loginTicket.setExpired(new Date(System.currentTimeMillis() + 1000 * 60 * 10));
 
         loginTicketMapper.insertLoginTicket(loginTicket);
+    }
+
+    @Test
+    public void testSelectLoginTicket() {
+        LoginTicket loginTicket = loginTicketMapper.selectByTicket("abc");
+        System.out.println(loginTicket);
+
+        loginTicketMapper.updateStatus("abc", 1);
+        loginTicket = loginTicketMapper.selectByTicket("abc");
+        System.out.println(loginTicket);
     }
 
     @Test
@@ -112,4 +132,5 @@ public class MapperTests {
         System.out.println(count);
 
     }
+
 }
