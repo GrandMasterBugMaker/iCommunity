@@ -38,7 +38,8 @@ public class UserController implements CommunityConstant {
     private String uploadPath;
     @Value("${icommunity.path.domain}")
     private String domain;
-    @Value("/icommunity")
+
+    @Value("${server.servlet.context-path}")
     private String contextPath;
     @Autowired
     private UserService userService;

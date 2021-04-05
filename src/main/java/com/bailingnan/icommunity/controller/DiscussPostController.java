@@ -205,7 +205,7 @@ public class DiscussPostController implements CommunityConstant {
 //        return CommunityUtil.getJSONString(0);
 //    }
 //
-//    // 删除
+    // 删除
 //    @RequestMapping(path = "/delete", method = RequestMethod.POST)
 //    @ResponseBody
 //    public String setDelete(int id) {

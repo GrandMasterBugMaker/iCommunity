@@ -36,10 +36,10 @@ public class UserService implements CommunityConstant {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Value("http://localhost:8080")
+    @Value("${icommunity.path.domain}")
     private String domain;
 
-    @Value("/icommunity")
+    @Value("${server.servlet.context-path}")
     private String contextPath;
 
 //    @Autowired
