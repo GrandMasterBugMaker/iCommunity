@@ -60,7 +60,7 @@ public class SearchController implements CommunityConstant {
         // 设置分页信息
         page.setPath("/search?keyword=" + keyword);
         page.setRows(list.get(0) == null ? 0 : (int) list.get(0));
-        return "/site/search";
+        return "site/search";
     }
 
 }

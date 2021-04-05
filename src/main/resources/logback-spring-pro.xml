@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <contextName>icommunity</contextName>
-    <property name="LOG_PATH" value="/Users/bailingnan/Downloads/project/log"/>
+    <property name="LOG_PATH" value="/tmp"/>
     <property name="APPDIR" value="icommunity"/>
 
     <!-- error file -->

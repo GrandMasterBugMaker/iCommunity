@@ -51,12 +51,12 @@ public class LoginController implements CommunityConstant {
 
     @RequestMapping(path = "/register", method = RequestMethod.GET)
     public String getRegisterPage() {
-        return "/site/register";
+        return "site/register";
     }
 
     @RequestMapping(path = "/login", method = RequestMethod.GET)
     public String getLoginPage() {
-        return "/site/login";
+        return "site/login";
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.POST)
@@ -65,16 +65,16 @@ public class LoginController implements CommunityConstant {
         if (map == null || map.isEmpty()) {
             model.addAttribute("msg", "注册成功,我们已经向您的邮箱发送了一封激活邮件,请尽快激活!");
             model.addAttribute("target", "/index");
-            return "/site/operate-result";
+            return "site/operate-result";
         } else {
             model.addAttribute("usernameMsg", map.get("usernameMsg"));
             model.addAttribute("passwordMsg", map.get("passwordMsg"));
             model.addAttribute("emailMsg", map.get("emailMsg"));
-            return "/site/register";
+            return "site/register";
         }
     }
 
-    // http://localhost:8080/community/activation/101/code
+    // http://localhost:8080/icommunity/activation/101/code
     @RequestMapping(path = "/activation/{userId}/{code}", method = RequestMethod.GET)
     public String activation(Model model, @PathVariable("userId") int userId, @PathVariable("code") String code) {
         int result = userService.activation(userId, code);
@@ -88,7 +88,7 @@ public class LoginController implements CommunityConstant {
             model.addAttribute("msg", "激活失败,您提供的激活码不正确!");
             model.addAttribute("target", "/index");
         }
-        return "/site/operate-result";
+        return "site/operate-result";
     }
 
     @RequestMapping(path = "/kaptcha", method = RequestMethod.GET)
@@ -134,7 +134,7 @@ public class LoginController implements CommunityConstant {
 
         if (StringUtils.isBlank(kaptcha) || StringUtils.isBlank(code) || !kaptcha.equalsIgnoreCase(code)) {
             model.addAttribute("codeMsg", "验证码不正确!");
-            return "/site/login";
+            return "site/login";
         }
 
         // 检查账号,密码
@@ -145,11 +145,11 @@ public class LoginController implements CommunityConstant {
             cookie.setPath(contextPath);
             cookie.setMaxAge(expiredSeconds);
             response.addCookie(cookie);
-            return "redirect:/index";
+            return "redirect:index";
         } else {
             model.addAttribute("usernameMsg", map.get("usernameMsg"));
             model.addAttribute("passwordMsg", map.get("passwordMsg"));
-            return "/site/login";
+            return "site/login";
         }
     }
 
@@ -157,7 +157,7 @@ public class LoginController implements CommunityConstant {
     public String logout(@CookieValue("ticket") String ticket) {
         userService.logout(ticket);
 //        SecurityContextHolder.clearContext();
-        return "redirect:/login";
+        return "redirect:login";
     }
 
 }

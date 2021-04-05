@@ -34,7 +34,7 @@ public class HomeController implements CommunityConstant {
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String root() {
-        return "forward:/index";
+        return "forward:index";
     }
 
     @RequestMapping(path = "/index", method = RequestMethod.GET)
@@ -57,16 +57,16 @@ public class HomeController implements CommunityConstant {
             }
         }
         model.addAttribute("discussPosts", discussPosts);
-        return "/index";
+        return "index";
     }
 
     @RequestMapping(path = "/error", method = RequestMethod.GET)
     public String getErrorPage() {
-        return "/error/500";
+        return "error/500";
     }
 
     @RequestMapping(path = "/denied", method = RequestMethod.GET)
     public String getDeniedPage() {
-        return "/error/404";
+        return "error/404";
     }
 }
