@@ -70,15 +70,15 @@
 	<div class="main">
 		<div class="container">
 			<div class="position-relative">
-				<!--				&lt;!&ndash; 筛选条件 &ndash;&gt;-->
-				<!--				<ul class="nav nav-tabs mb-3">-->
-				<!--					<li class="nav-item">-->
-				<!--						<a class="nav-link active" href="#">最新</a>-->
-				<!--					</li>-->
-				<!--					<li class="nav-item">-->
-				<!--						<a class="nav-link" href="#">最热</a>-->
-				<!--					</li>-->
-				<!--				</ul>-->
+				<!-- 筛选条件 -->
+				<ul class="nav nav-tabs mb-3">
+					<li class="nav-item">
+						<a th:class="|nav-link ${orderMode==0?'active':''}|" th:href="@{/index(orderMode=0)}">最新</a>
+					</li>
+					<li class="nav-item">
+						<a th:class="|nav-link ${orderMode==1?'active':''}|" th:href="@{/index(orderMode=1)}">最热</a>
+					</li>
+				</ul>
 				<button class="btn btn-primary btn-sm position-absolute rt-0" data-target="#publishModal"
 						data-toggle="modal" th:if="${loginUser!=null}" type="button">我要发布
 				</button>

@@ -2,6 +2,7 @@ package com.bailingnan.icommunity.service;
 
 import com.bailingnan.icommunity.dao.DiscussPostMapper;
 import com.bailingnan.icommunity.entity.DiscussPost;
+import com.bailingnan.icommunity.util.RedisKeyUtil;
 import com.bailingnan.icommunity.util.SensitiveFilter;
 import com.github.benmanes.caffeine.cache.CacheLoader;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -12,11 +13,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -34,6 +38,9 @@ public class DiscussPostService {
     @Autowired
     private SensitiveFilter sensitiveFilter;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     @Value("${caffeine.posts.max-size}")
     private int maxSize;
 
@@ -50,7 +57,7 @@ public class DiscussPostService {
 
     @PostConstruct
     public void init() {
-        // 初始化帖子列表缓存
+        // 初始化帖子列表缓存，因为必缓存热门帖，所以0,1固定
         postListCache = Caffeine.newBuilder()
                 .maximumSize(maxSize)
                 .expireAfterWrite(expireSeconds, TimeUnit.SECONDS)
@@ -59,22 +66,57 @@ public class DiscussPostService {
                     @Override
                     public List<DiscussPost> load(@NonNull String key) throws Exception {
                         if (key == null || key.length() == 0) {
-                            throw new IllegalArgumentException("参数错误!");
+                            throw new IllegalArgumentException("参数错误！");
                         }
-
                         String[] params = key.split(":");
                         if (params == null || params.length != 2) {
-                            throw new IllegalArgumentException("参数错误!");
+                            throw new IllegalArgumentException("参数错误！");
                         }
-
                         int offset = Integer.valueOf(params[0]);
                         int limit = Integer.valueOf(params[1]);
 
-                        // 二级缓存: Redis -> mysql
-
-                        logger.debug("load post list from DB.");
-                        return discussPostMapper.selectDiscussPosts(0, offset, limit);
+                        // 二级缓存：Redis -> mysql
+                        String redisKey = RedisKeyUtil.getHotPostListKey(offset, limit);
+                        // 如果redis中不存在就去数据库里查，查到了就更新到redis中，然后返回作为本地缓存的同步
+                        if (!redisTemplate.hasKey(redisKey)) {
+                            logger.debug("redis中没有缓存");
+                            logger.debug("load post list from DB.");
+                            List<DiscussPost> result = discussPostMapper.selectDiscussPosts(0, offset, limit, 1);
+                            for (DiscussPost post : result) {
+                                redisTemplate.opsForZSet().add(redisKey, post, post.getScore());
+                            }
+                            redisTemplate.expire(redisKey, 15, TimeUnit.SECONDS);
+                            return result;
+                        } else {
+                            logger.debug("redis中有缓存");
+                            // 要查看redis数据是否过期
+                            System.out.println(redisTemplate.getExpire(redisKey));
+                            boolean isExpired = redisTemplate.getExpire(redisKey) < 0;
+                            if (isExpired) {
+                                // 如果过期的话，就删去key，就去数据库里查
+                                logger.debug("redis expired!");
+                                redisTemplate.delete(redisKey);
+                                logger.debug("load post list from DB.");
+                                List<DiscussPost> result = discussPostMapper.selectDiscussPosts(0, offset, limit, 1);
+                                for (DiscussPost post : result) {
+                                    redisTemplate.opsForZSet().add(redisKey, post, post.getScore());
+                                }
+                                redisTemplate.expire(redisKey, 7 * 60, TimeUnit.SECONDS);
+                                return result;
+                            } else {
+                                Set<DiscussPost> posts = redisTemplate.opsForZSet().reverseRange(redisKey, offset, limit);
+                                logger.debug("redis len: " + redisTemplate.opsForZSet().zCard(redisKey));
+                                logger.debug("load post list from redis.");
+                                List<DiscussPost> list = new ArrayList<>();
+                                for (DiscussPost post : posts) {
+                                    list.add(post);
+                                }
+                                return list;
+                            }
+                        }
                     }
+//                    logger.debug("load post list from DB.");
+//                    return discussPostMapper.selectDiscussPosts(0, offset, limit, 1);
                 });
         // 初始化帖子总数缓存
         postRowsCache = Caffeine.newBuilder()
@@ -90,13 +132,14 @@ public class DiscussPostService {
                 });
     }
 
-    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit) {
-        if (userId == 0) {//缓存首页帖
+    public List<DiscussPost> findDiscussPosts(int userId, int offset, int limit, int orderMode) {
+        //不同场景下都要用到，而offset和limit可唯一确定一次查询
+        if (userId == 0 && orderMode == 1) {
             return postListCache.get(offset + ":" + limit);
         }
 
         logger.debug("load post list from DB.");
-        return discussPostMapper.selectDiscussPosts(userId, offset, limit);
+        return discussPostMapper.selectDiscussPosts(userId, offset, limit, orderMode);
     }
 
     public int findDiscussPostRows(int userId) {
