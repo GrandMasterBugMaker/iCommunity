@@ -16,7 +16,7 @@ public class CommunityUtil {
     public static String generateUUID(){
         return UUID.randomUUID().toString().replaceAll("-","");
     }
-    //MD5加密
+    //MD5加密，对密码进行加盐，也就是在用户的密码后面拼接一个随机字符串后再进行MD5计算。
     public static String md5(String key){
         if(StringUtils.isBlank(key)){
             return null;

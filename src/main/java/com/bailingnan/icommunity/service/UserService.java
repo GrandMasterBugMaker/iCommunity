@@ -125,7 +125,7 @@ public class UserService implements CommunityConstant {
             return ACTIVATION_FAILURE;
         }
     }
-
+    //返回值使用map返回多种情况的消息，需要浏览器传用户名，密码，过期时间。
     public Map<String, Object> login(String username, String password, long expiredSeconds) {
         Map<String, Object> map = new HashMap<>();
 

@@ -44,6 +44,7 @@ public class HomeController implements CommunityConstant {
         page.setRows(discussPostService.findDiscussPostRows(0));
         page.setPath("/index");
         List<DiscussPost> list = discussPostService.findDiscussPosts(0, page.getOffset(), page.getLimit());
+        // 利用post里的id去查询对应的user，然后用HashMap装到一起，再用list处理map。
         List<Map<String, Object>> discussPosts = new ArrayList<>();
         if (list != null) {
             for (DiscussPost post : list) {
@@ -56,6 +57,7 @@ public class HomeController implements CommunityConstant {
                 discussPosts.add(map);
             }
         }
+        //最终我们传给模板引擎的就是一个list，list里是每个帖子对应的map，每个map里有post对象和user对象
         model.addAttribute("discussPosts", discussPosts);
         return "index";
     }
