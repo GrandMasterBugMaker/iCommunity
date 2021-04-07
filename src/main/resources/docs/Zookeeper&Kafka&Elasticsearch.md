@@ -129,3 +129,11 @@ sudo  chown -R bailingnan:bailingnan /tmp/elasticsearch
 ```shell
 http://120.48.0.127:9200/_cat/health?v
 ```
+
+## 项目运行
+
+```shell
+source /etc/profile
+killall java
+nohup java -jar /root/iCommunity/icommunity-0.0.1-SNAPSHOT.jar > nohup.log 2>&1 &
+```
