@@ -53,7 +53,7 @@
 
 ## 项目架构
 
-![](https://picgp.oss-cn-beijing.aliyuncs.com/img/20210408234401.png)
+![](https://picgp.oss-cn-beijing.aliyuncs.com/img/20210409150058.png)
 
 ## 功能简介
 
