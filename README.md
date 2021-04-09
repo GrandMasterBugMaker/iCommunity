@@ -53,6 +53,7 @@
 
 ![](https://github.com/bailingnan/iCommunity/blob/main/src/main/resources/docs/20210408234320.png)
 
+![](https://picgp.oss-cn-beijing.aliyuncs.com/img/20210408051708.png)
 ## 功能简介
 
 - 基于 SpringBoot 和 Mybatis 框架实现基础的注册、登录、发帖、评论等功能
