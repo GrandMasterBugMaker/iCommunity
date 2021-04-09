@@ -42,8 +42,6 @@
 
 ## 技术选型
 
-![](https://picgp.oss-cn-beijing.aliyuncs.com/img/20210409145949.png)
-
 - 框架:SpringBoot+Mybatis
 - 数据库:MySQL
 - 中间件:分布式缓存Redis + 消息队列Kafka + 全文检索ElasticSearch + 本地缓存Caffeine + 定时任务Quartz
@@ -53,7 +51,7 @@
 
 ## 项目架构
 
-![](https://picgp.oss-cn-beijing.aliyuncs.com/img/20210409150058.png)
+![](https://github.com/bailingnan/iCommunity/blob/main/src/main/resources/docs/20210408234320.png)
 
 ## 功能简介
 
@@ -387,7 +385,7 @@ offset以及limit代表的是起始行和终止行，就是某一页的热门帖
 
 优化前：qps稳定在9.5左右：
 
-![](https://picgp.oss-cn-beijing.aliyuncs.com/img/20210409004613.png)
+![](https://github.com/bailingnan/iCommunity/blob/main/src/main/resources/docs/20210409004613.png)
 
 启用缓存优化后：qps达到了189左右，可以看到性能有明显的提升
 
