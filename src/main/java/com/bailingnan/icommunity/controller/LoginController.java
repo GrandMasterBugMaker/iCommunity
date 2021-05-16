@@ -74,7 +74,7 @@ public class LoginController implements CommunityConstant {
         }
     }
 
-    // http://localhost:8080/icommunity/activation/101/code
+    // http://localhost:8080/icommunity/activation/userId/code
     //访问路径在之前激活邮件那里定义过了，参数是直接拼接到路径后面的。
     @RequestMapping(path = "/activation/{userId}/{code}", method = RequestMethod.GET)
     public String activation(Model model, @PathVariable("userId") int userId, @PathVariable("code") String code) {

@@ -7,6 +7,7 @@ import java.util.Map;
  * @author bailingnan
  * @date 2021/4/4
  */
+
 public class Event {
 
     private final Map<String, Object> data = new HashMap<>();
