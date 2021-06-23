@@ -1,5 +1,6 @@
 package com.bailingnan.icommunity;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -15,14 +16,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ContextConfiguration(classes=ICommunityApplication.class)
+@Slf4j
 public class LoggerTests {
-    private static final Logger logger= LoggerFactory.getLogger(LoggerTests.class);
     @Test
     public void testLogger(){
-        System.out.println(logger.getName());
-        logger.debug("debug log");
-        logger.info("info log");
-        logger.warn("warn log");
-        logger.error("error log");
+        log.debug("debug log");
+        log.info("info log");
+        log.warn("warn log");
+        log.error("error log");
     }
 }
